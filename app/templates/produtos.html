@@ -1,0 +1,55 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Produtos{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+    <span class="eyebrow">Nosso catálogo</span>
+    <h1>Catálogo Django Games</h1>
+    <p>Confira os jogos e produtos disponíveis na nossa loja.{% if not user.is_authenticated %} Faça login para comprar.{% endif %}</p>
+</div>
+
+<div class="cards-container">
+    {# Itens cadastrados no banco local: têm o botão Comprar (somente usuários logados) #}
+    {% for servico in servicos %}
+    <div class="card">
+        <div class="card-img">
+            {% if servico.imagem %}
+                <img src="{{ servico.imagem.url }}" alt="{{ servico.nome }}">
+            {% endif %}
+        </div>
+        <div class="card-corpo">
+            <h3>{{ servico.nome }}</h3>
+            <p>{{ servico.descricao|truncatechars:90 }}</p>
+            <div class="preco">R$ {{ servico.preco|floatformat:2 }}</div>
+            <div class="acoes">
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'comprar' servico.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-pequeno">Comprar</button>
+                </form>
+                {% else %}
+                <a class="btn btn-pequeno" href="{% url 'login' %}?next={{ request.path }}">Comprar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {# Itens obtidos pela API externa (exigência do PDF): fazem parte do mesmo catálogo #}
+    {% for p in produtos_externos %}
+    <div class="card">
+        <div class="card-img"><img src="{{ p.image }}" alt="{{ p.title }}" loading="lazy"></div>
+        <div class="card-corpo">
+            <h3>{{ p.title|truncatechars:48 }}</h3>
+            <p>{{ p.description|truncatechars:90 }}</p>
+            <div class="preco">R$ {{ p.price|floatformat:2 }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not servicos and not produtos_externos %}
+    <p class="vazio">Nenhum produto disponível no momento.</p>
+{% endif %}
+{% endblock %}

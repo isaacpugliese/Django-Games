@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}{% endblock %} | Django Games</title>
+    {# Única folha de estilo do site. O ?v= força o navegador a baixar a versão nova; some 1 ao alterar o CSS. #}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="topo">
+        <div class="topo-inner">
+            <div class="marca">
+                <a href="{% url 'index' %}">
+                    <span class="logo" aria-hidden="true">DG</span>
+                    <span class="nome-loja">Django <span>Games</span></span>
+                </a>
+            </div>
+            <nav class="menu">
+                <a href="{% url 'quem_somos' %}">Quem Somos</a>
+                <a href="{% url 'produtos' %}">Produtos</a>
+                <a href="{% url 'novo_contato' %}">Contato</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="destaque">Dashboard</a>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="link-sair">Sair</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="destaque">Entrar</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% if messages %}
+        <div class="mensagens">
+            {% for message in messages %}
+                <div class="alerta alerta-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block conteudo %}
+        {% endblock %}
+    </main>
+
+    <footer class="rodape">
+        &copy; {% now "Y" %} <strong>Django Games</strong> &middot; Projeto WEB III
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

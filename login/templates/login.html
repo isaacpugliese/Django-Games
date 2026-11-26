@@ -1,0 +1,27 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Entrar{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+    <span class="eyebrow">Área restrita</span>
+    <h1>Bem-vindo de volta!</h1>
+    <p>Acesse sua conta para continuar utilizando nossa plataforma.</p>
+</div>
+
+<div class="caixa-form">
+    <div class="painel">
+        <h2>Entrar na sua conta</h2>
+        <p class="sub">Informe seus dados de acesso abaixo.</p>
+        <form method="post">
+            {% csrf_token %}
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            {% include 'partials/campos_form.html' %}
+            <a class="link-esqueci" href="{% url 'password_reset' %}">Esqueceu sua senha?</a>
+            <button type="submit" class="btn btn-bloco">Entrar</button>
+        </form>
+        <hr class="divisor">
+        <p class="rodape-form" style="margin:0">Não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
+    </div>
+</div>
+{% endblock %}

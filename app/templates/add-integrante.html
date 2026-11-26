@@ -1,0 +1,56 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Novo Integrante{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+    <span class="eyebrow">Nossa equipe</span>
+    <h1>Novo Integrante</h1>
+    <p>Cadastre um novo integrante e apresente sua função e contribuição para nossa equipe.</p>
+</div>
+
+<div class="caixa-form larga">
+    <div class="painel">
+        <h2>Informações do integrante</h2>
+        <p class="sub">Preencha os dados abaixo para realizar o cadastro.</p>
+        <form method="POST" action="{% url 'addIntegrante' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="campo">
+                <label for="nome">Nome completo</label>
+                <input type="text" name="nome" id="nome" placeholder="Digite o nome do integrante" value="{{ dados.nome|default:'' }}" required>
+            </div>
+            <div class="campo">
+                <label for="cargo">Cargo</label>
+                <input type="text" name="cargo" id="cargo" placeholder="Ex.: Desenvolvedor Web" value="{{ dados.cargo|default:'' }}" required>
+            </div>
+            <div class="campo">
+                <label for="biografia">Biografia</label>
+                <textarea name="biografia" id="biografia" placeholder="Conte um pouco sobre o integrante..." required>{{ dados.biografia|default:'' }}</textarea>
+            </div>
+            <div class="campo">
+                <label for="foto_arquivo">Foto</label>
+                <input type="file" name="foto_arquivo" id="foto_arquivo" accept="image/png,image/jpeg,image/webp,image/gif">
+                <div class="ajuda">Escolha uma imagem do seu computador (JPG, PNG, WEBP ou GIF, até 5 MB). Ela será exibida na página Quem Somos.</div>
+                <img id="previa" alt="Pré-visualização" style="display:none;width:100%;max-width:220px;border-radius:10px;margin-top:10px;border:1px solid var(--linha)">
+            </div>
+            <button type="submit" class="btn btn-bloco">Cadastrar Integrante</button>
+            <a class="btn btn-claro btn-bloco" style="margin-top:8px" href="{% url 'integrantes' %}">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Mostra a imagem escolhida antes de salvar
+    document.getElementById('foto_arquivo').addEventListener('change', function () {
+        const previa = document.getElementById('previa');
+        if (this.files && this.files[0]) {
+            previa.src = URL.createObjectURL(this.files[0]);
+            previa.style.display = 'block';
+        } else {
+            previa.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

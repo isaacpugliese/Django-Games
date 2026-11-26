@@ -1,0 +1,53 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Dashboard{% endblock %}
+
+{% block conteudo %}
+<div class="boas-vindas">
+    <span class="eyebrow">Painel do usuário</span>
+    <h1>Olá, {{ user.first_name|default:user.username }}!</h1>
+    <p>Bem-vindo ao seu painel de controle. Escolha uma das opções abaixo para continuar.</p>
+</div>
+
+<h2 class="secao" style="margin-top:0">Meu espaço</h2>
+<p class="secao-sub">Gerencie suas informações, acompanhe seus pedidos e acesse as funcionalidades disponíveis na plataforma.</p>
+
+<div class="grade-atalhos">
+    <a class="atalho" href="{% url 'perfil' %}">
+        <span class="eyebrow">Minha conta</span>
+        <h3>Editar Perfil</h3>
+        <p>Consulte e atualize seus dados pessoais, informações e preferências.</p>
+        <span class="ir">Acessar perfil &rarr;</span>
+    </a>
+    <a class="atalho" href="{% url 'lista_contatos' %}">
+        <span class="eyebrow">Comunicação</span>
+        <h3>Contatos</h3>
+        <p>Consulte e gerencie os contatos cadastrados na plataforma.</p>
+        <span class="ir">Gerenciar contatos &rarr;</span>
+    </a>
+    <a class="atalho" href="{% url 'servicos' %}">
+        <span class="eyebrow">Gerenciamento</span>
+        <h3>Serviços</h3>
+        <p>Cadastre, consulte e gerencie os serviços disponíveis no sistema.</p>
+        <span class="ir">Gerenciar serviços &rarr;</span>
+    </a>
+    <a class="atalho" href="{% url 'integrantes' %}">
+        <span class="eyebrow">Nossa equipe</span>
+        <h3>Equipe</h3>
+        <p>Gerencie os integrantes, cargos, biografias e informações da equipe.</p>
+        <span class="ir">Gerenciar equipe &rarr;</span>
+    </a>
+    <a class="atalho" href="{% url 'meus_pedidos' %}">
+        <span class="eyebrow">Minhas compras</span>
+        <h3>Meus Pedidos</h3>
+        <p>Consulte seus serviços adquiridos, acompanhe suas compras e visualize os valores.</p>
+        <span class="ir">Visualizar pedidos &rarr;</span>
+    </a>
+    <a class="atalho" href="{% url 'relatorios' %}">
+        <span class="eyebrow">Análises</span>
+        <h3>Relatórios</h3>
+        <p>Consulte informações, dados e estatísticas sobre os serviços e pedidos da plataforma.</p>
+        <span class="ir">Acessar relatórios &rarr;</span>
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Meus Pedidos{% endblock %}
+
+{% block conteudo %}
+<div class="topo-gestao">
+    <div>
+        <span class="eyebrow">Minhas compras</span>
+        <h1>Meus Pedidos</h1>
+        <p>Acompanhe os serviços que você adquiriu.</p>
+    </div>
+    <a class="btn" href="{% url 'produtos' %}">Continuar comprando</a>
+</div>
+
+<div class="lista-pedidos">
+    {% for pedido in pedidos %}
+    <div class="pedido">
+        <div class="img">
+            {% if pedido.servico and pedido.servico.imagem %}
+                <img src="{{ pedido.servico.imagem.url }}" alt="{{ pedido.nome_servico }}">
+            {% else %}
+                {{ pedido.nome_servico|slice:":1"|upper }}
+            {% endif %}
+        </div>
+        <div class="info">
+            <strong>{{ pedido.nome_servico }}</strong>
+            {% if pedido.servico and pedido.servico.descricao %}<span>{{ pedido.servico.descricao|truncatechars:70 }}</span>{% endif %}
+            <span>Comprado em: {{ pedido.criado_em|date:"d/m/Y H:i" }}</span>
+        </div>
+        <div class="valor"><small>Valor</small>R$ {{ pedido.preco|floatformat:2 }}</div>
+        <form class="inline" method="post" action="{% url 'remover_pedido' pedido.id %}" onsubmit="return confirm('Deseja realmente remover este pedido?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-perigo btn-pequeno">Remover</button>
+        </form>
+    </div>
+    {% empty %}
+    <div class="painel vazio">Você ainda não fez nenhum pedido. <a href="{% url 'produtos' %}"><strong>Ver produtos</strong></a></div>
+    {% endfor %}
+</div>
+
+{% if pedidos %}
+<div class="total-pedidos">
+    <span>Total das compras</span>
+    <span class="valor">R$ {{ total|floatformat:2 }}</span>
+</div>
+{% endif %}
+<a class="voltar" href="{% url 'dashboard' %}">Voltar ao dashboard</a>
+{% endblock %}

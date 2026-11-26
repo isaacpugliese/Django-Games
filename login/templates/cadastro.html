@@ -1,0 +1,25 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Cadastro{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+    <span class="eyebrow">Novo usuário</span>
+    <h1>Crie sua conta</h1>
+    <p>Preencha os dados para fazer parte da nossa plataforma.</p>
+</div>
+
+<div class="caixa-form">
+    <div class="painel">
+        <h2>Cadastrar-se</h2>
+        <p class="sub">Informe seus dados para criar seu usuário.</p>
+        <form method="POST">
+            {% csrf_token %}
+            {% include 'partials/campos_form.html' %}
+            <button type="submit" class="btn btn-bloco">Criar minha conta</button>
+        </form>
+        <hr class="divisor">
+        <p class="rodape-form" style="margin:0">Já possui uma conta? <a href="{% url 'login' %}">Fazer login</a></p>
+    </div>
+</div>
+{% endblock %}

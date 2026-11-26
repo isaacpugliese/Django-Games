@@ -1,0 +1,40 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Quem Somos{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+    <span class="eyebrow">Institucional</span>
+    <h1>Quem Somos</h1>
+    <p>Conheça nossa equipe! Somos pessoas dedicadas, trabalhando juntas para desenvolver soluções e compartilhar conhecimento.</p>
+</div>
+
+<section class="texto-bloco" style="margin: 0 auto 36px; text-align:center">
+    <p>A Django Games é uma loja de jogos feita por uma equipe apaixonada por games e tecnologia. Nossa missão é oferecer uma experiência de compra simples, segura e transparente, com atenção às necessidades de cada jogador.</p>
+</section>
+
+{% if erro %}
+    <div class="alerta alerta-info" style="text-align:center">Não foi possível carregar os integrantes da equipe no momento. Tente novamente em instantes.</div>
+{% else %}
+<div class="grade-equipe">
+    {% for integrante in integrantes %}
+    <article class="card membro">
+        <div class="foto">
+            {% if integrante.foto_url %}
+                <img src="{{ integrante.foto_url }}" alt="{{ integrante.nome }}">
+            {% else %}
+                <div class="inicial">{{ integrante.nome|slice:":1"|upper }}</div>
+            {% endif %}
+        </div>
+        <div class="card-corpo">
+            <h3>{{ integrante.nome }}</h3>
+            {% if integrante.cargo %}<span class="badge">{{ integrante.cargo }}</span>{% endif %}
+            <p>{{ integrante.biografia }}</p>
+        </div>
+    </article>
+    {% empty %}
+        <p class="vazio" style="grid-column:1/-1">Nenhum integrante cadastrado.</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Alterar Senha{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+    <span class="eyebrow">Segurança da conta</span>
+    <h1>Alterar Senha</h1>
+    <p>Atualize sua senha para manter sua conta protegida e segura.</p>
+</div>
+
+<div class="caixa-form">
+    <div class="painel">
+        <h2>Nova senha</h2>
+        <p class="sub">Preencha os campos abaixo para alterar sua senha.</p>
+        <form method="post">
+            {% csrf_token %}
+            {% include 'partials/campos_form.html' %}
+            <button type="submit" class="btn btn-bloco">Alterar minha senha</button>
+        </form>
+        <hr class="divisor">
+        <strong style="font-size:13px">Recomendação de segurança</strong>
+        <div class="ajuda">Utilize uma senha forte, com letras, números e caracteres especiais.</div>
+    </div>
+    <a class="voltar" href="{% url 'perfil' %}">Voltar ao meu perfil</a>
+</div>
+{% endblock %}

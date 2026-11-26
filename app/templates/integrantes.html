@@ -1,0 +1,56 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Equipe{% endblock %}
+
+{% block conteudo %}
+<div class="topo-gestao">
+    <div>
+        <span class="eyebrow">Nossa equipe</span>
+        <h1>Gerenciar Integrantes</h1>
+        <p>Cadastre, consulte, edite e exclua os integrantes.</p>
+    </div>
+    <a class="btn" href="{% url 'addIntegrante' %}">+ Novo Integrante</a>
+</div>
+
+{% if erro %}
+    <div class="alerta alerta-info">Não foi possível conectar ao banco remoto (Supabase). Verifique o arquivo .env e a conexão.</div>
+{% endif %}
+
+<div class="painel">
+    <div class="tabela-wrap">
+        <table class="tabela">
+            <thead>
+                <tr><th>ID</th><th>Foto</th><th>Nome</th><th>Cargo</th><th>Biografia</th><th>Ações</th></tr>
+            </thead>
+            <tbody>
+                {% for integrante in integrantes %}
+                <tr>
+                    <td>{{ integrante.id }}</td>
+                    <td>
+                        {% if integrante.foto_url %}
+                            <img class="avatar" src="{{ integrante.foto_url }}" alt="{{ integrante.nome }}">
+                        {% endif %}
+                    </td>
+                    <td class="nome">{{ integrante.nome }}</td>
+                    <td>{{ integrante.cargo }}</td>
+                    <td>{{ integrante.biografia|truncatechars:80 }}</td>
+                    <td>
+                        <div class="acoes-celula">
+                            <a class="btn btn-claro btn-pequeno" href="{% url 'editIntegrante' integrante.id %}">Editar</a>
+                            <form class="inline" method="POST" action="{% url 'delIntegrante' integrante.id %}" onsubmit="return confirm('Deseja Realmente Excluir?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-perigo btn-pequeno">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="vazio">Nenhum integrante cadastrado</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p class="rodape-tabela">Total de integrantes cadastrados: <strong>{{ integrantes|length }}</strong></p>
+</div>
+<a class="voltar" href="{% url 'dashboard' %}">Voltar ao dashboard</a>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Editar Integrante{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+    <span class="eyebrow">Nossa equipe</span>
+    <h1>Editar Integrante</h1>
+    <p>Atualize as informações do integrante selecionado em nossa equipe.</p>
+</div>
+
+<div class="caixa-form larga">
+    <div class="painel">
+        <h2>Informações do integrante</h2>
+        <p class="sub">Altere os campos necessários abaixo.</p>
+        <form method="POST" action="{% url 'editIntegrante' integrante.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="campo">
+                <label for="nome">Nome completo</label>
+                <input type="text" name="nome" id="nome" value="{{ integrante.nome }}" required>
+            </div>
+            <div class="campo">
+                <label for="cargo">Cargo</label>
+                <input type="text" name="cargo" id="cargo" value="{{ integrante.cargo }}" required>
+            </div>
+            <div class="campo">
+                <label for="biografia">Biografia</label>
+                <textarea name="biografia" id="biografia" required>{{ integrante.biografia }}</textarea>
+            </div>
+
+            <div class="campo">
+                <label for="foto_arquivo">Foto</label>
+                {% if integrante.foto_url %}
+                <div class="ajuda" style="margin:0 0 8px">Foto atual:</div>
+                <img src="{{ integrante.foto_url }}" alt="{{ integrante.nome }}" style="width:100%;max-width:220px;border-radius:10px;border:1px solid var(--linha);display:block;margin-bottom:12px">
+                {% endif %}
+                <input type="file" name="foto_arquivo" id="foto_arquivo" accept="image/png,image/jpeg,image/webp,image/gif">
+                <div class="ajuda">Escolha uma nova imagem do seu computador (JPG, PNG, WEBP ou GIF, até 5 MB) para {% if integrante.foto_url %}substituir a atual{% else %}definir a foto{% endif %}. Ela será exibida na página Quem Somos.</div>
+                <img id="previa" alt="Pré-visualização" style="display:none;width:100%;max-width:220px;border-radius:10px;margin-top:10px;border:1px solid var(--linha)">
+            </div>
+            {% if integrante.foto_url %}
+            <input type="hidden" name="foto_atual" value="{{ integrante.foto_url }}">
+            <div class="campo campo-check">
+                <input type="checkbox" name="remover_foto" id="remover_foto" value="1">
+                <label for="remover_foto">Remover a foto atual</label>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-bloco">Salvar Alterações</button>
+            <a class="btn btn-claro btn-bloco" style="margin-top:8px" href="{% url 'integrantes' %}">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Mostra a imagem escolhida antes de salvar
+    document.getElementById('foto_arquivo').addEventListener('change', function () {
+        const previa = document.getElementById('previa');
+        if (this.files && this.files[0]) {
+            previa.src = URL.createObjectURL(this.files[0]);
+            previa.style.display = 'block';
+        } else {
+            previa.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Contatos{% endblock %}
+
+{% block conteudo %}
+<div class="topo-gestao">
+    <div>
+        <span class="eyebrow">Gerenciamento</span>
+        <h1>Nossos Contatos</h1>
+        <p>Consulte e gerencie as mensagens recebidas através do formulário de contato.</p>
+    </div>
+    <div class="contador">
+        <div class="rotulo">Total de contatos</div>
+        <div class="valor">{{ contatos|length }}</div>
+    </div>
+</div>
+
+<div class="painel">
+    <h2>Lista de contatos</h2>
+    <p class="sub">Contatos recebidos pela plataforma.</p>
+    <div class="tabela-wrap">
+        <table class="tabela">
+            <thead>
+                <tr><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Mensagem</th><th>Ação</th></tr>
+            </thead>
+            <tbody>
+                {% for c in contatos %}
+                <tr>
+                    <td class="nome">{{ c.nome }}</td>
+                    <td>{{ c.email }}</td>
+                    <td>{{ c.telefone|default:"-" }}</td>
+                    <td style="max-width:340px">{{ c.mensagem|linebreaksbr }}</td>
+                    <td>
+                        <form class="inline" method="post" action="{% url 'excluir_contato' c.id %}" onsubmit="return confirm('Deseja realmente excluir este contato?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-perigo btn-pequeno">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="vazio">Nenhum contato recebido ainda.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<a class="voltar" href="{% url 'dashboard' %}">Voltar ao dashboard</a>
+{% endblock %}

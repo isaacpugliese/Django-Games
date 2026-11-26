@@ -1,0 +1,20 @@
+{# Renderiza os campos de um form Django com o visual do tema (incluir com a tag include). #}
+{% for erro in form.non_field_errors %}
+    <div class="alerta alerta-erro" style="margin-bottom:14px">{{ erro }}</div>
+{% endfor %}
+{% for field in form %}
+    {% if field.field.widget.input_type == 'checkbox' %}
+    <div class="campo campo-check">
+        {{ field }}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {% for erro in field.errors %}<div class="erro">{{ erro }}</div>{% endfor %}
+    </div>
+    {% else %}
+    <div class="campo">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<div class="ajuda">{{ field.help_text|safe }}</div>{% endif %}
+        {% for erro in field.errors %}<div class="erro">{{ erro }}</div>{% endfor %}
+    </div>
+    {% endif %}
+{% endfor %}

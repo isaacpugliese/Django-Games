@@ -1,0 +1,43 @@
+{% extends 'template.html' %}
+
+{% block titulo %}Perfil{% endblock %}
+
+{% block conteudo %}
+<div class="cabecalho-pagina">
+    <span class="eyebrow">Minha conta</span>
+    <h1>Meu Perfil</h1>
+    <p>Gerencie suas informações pessoais e mantenha seus dados sempre atualizados.</p>
+</div>
+
+<div class="caixa-form">
+    <div class="painel">
+        <h2>Informações pessoais</h2>
+        <p class="sub">Atualize os dados da sua conta ({{ user.username }}).</p>
+        <form method="post" action="{% url 'perfil' %}">
+            {% csrf_token %}
+            <div class="campo">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" value="{{ user.first_name }}" placeholder="Digite seu nome">
+            </div>
+            <div class="campo">
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" id="sobrenome" name="sobrenome" value="{{ user.last_name }}" placeholder="Digite seu sobrenome">
+            </div>
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}">
+            </div>
+            <button type="submit" class="btn btn-bloco">Salvar alterações</button>
+        </form>
+        <hr class="divisor">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px">
+            <div>
+                <strong style="font-size:14px">Segurança da conta</strong>
+                <div class="ajuda" style="margin-top:2px">Mantenha sua senha atualizada para proteger o acesso à sua conta.</div>
+            </div>
+            <a class="btn btn-claro btn-pequeno" href="{% url 'alterar-senha' %}">Alterar senha</a>
+        </div>
+    </div>
+    <a class="voltar" href="{% url 'dashboard' %}">Voltar ao dashboard</a>
+</div>
+{% endblock %}
